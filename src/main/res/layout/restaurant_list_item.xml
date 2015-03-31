@@ -1,12 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dip" >
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/list_item_name"/>
-</LinearLayout>
+<!-- Title Of Song-->
+<TextView
+    android:id="@+id/list_item_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Rihanna Love the way lie"
+    android:textColor="#040404"
+    android:typeface="sans"
+    android:textSize="15dip"
+    android:textStyle="bold"/>
+
+<!-- Artist Name -->
+<TextView
+    android:id="@+id/list_item_address"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/list_item_name"
+    android:textColor="#343434"
+    android:textSize="10dip"
+    android:layout_marginTop="1dip"
+    android:text="Just gona stand there and ..." />
+
+
+</RelativeLayout>

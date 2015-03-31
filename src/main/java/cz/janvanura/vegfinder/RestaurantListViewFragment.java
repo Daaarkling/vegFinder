@@ -1,66 +1,56 @@
 package cz.janvanura.vegfinder;
 
+
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.TextView;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import cz.janvanura.vegfinder.model.repository.DbRestaurantRepository;
-import cz.janvanura.vegfinder.model.repository.FakeRestaurantRepository;
-import cz.janvanura.vegfinder.model.repository.IRestaurantRepository;
+import cz.janvanura.vegfinder.model.db.RestaurantDbSchema;
 import cz.janvanura.vegfinder.model.entity.Restaurant;
+import cz.janvanura.vegfinder.model.repository.RestaurantRepository;
 
 /**
  * Created by Jan on 25. 3. 2015.
  */
 public class RestaurantListViewFragment extends ListFragment {
 
-    private IRestaurantRepository mRestaurantRepository;
-    private List<Restaurant> mRestaurants;
+    private static final int LOADER_ALL = 0;
+    private RestaurantRepository mRepository;
+    private SimpleCursorAdapter mAdapter;
+    private ListView mListView;
+    private Cursor mCursor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mRestaurantRepository = new DbRestaurantRepository(getActivity());
-        mRestaurants = mRestaurantRepository.findAll();
 
-        setListAdapter(new RestaurantAdapter());
+        mRepository = new RestaurantRepository(getActivity());
+        mCursor = mRepository.findAll();
+        mAdapter = new SimpleCursorAdapter(
+                getActivity(),
+                R.layout.restaurant_list_item,
+                mCursor,
+                new String[]{RestaurantDbSchema.C_NAME, RestaurantDbSchema.C_LOCALITY},
+                new int[]{R.id.list_item_name, R.id.list_item_address},
+                SimpleCursorAdapter.NO_SELECTION
+            );
+
+        setListAdapter(mAdapter);
     }
+
+
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
 
-    }
-
-    private class RestaurantAdapter extends ArrayAdapter<Restaurant> {
-
-        private IRestaurantRepository mDataProvider;
-
-        private RestaurantAdapter() {
-            super(getActivity(), 0, mRestaurants);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView == null){
-                convertView = getActivity().getLayoutInflater().inflate(R.layout.restaurant_list_item, null, false);
-            }
-
-            Restaurant restaurant = mRestaurants.get(position);
-            TextView textView = (TextView) convertView.findViewById(R.id.list_item_name);
-            textView.setText(restaurant.getName());
-
-            return convertView;
-        }
+        Restaurant restaurant = mRepository.findById((int)id);
+        Toast.makeText(getActivity(), restaurant.getName(), Toast.LENGTH_SHORT).show();
     }
 }
