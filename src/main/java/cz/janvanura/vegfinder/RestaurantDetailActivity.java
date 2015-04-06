@@ -5,12 +5,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import cz.janvanura.vegfinder.model.repository.RestaurantRepository;
 
 
 public class RestaurantDetailActivity extends BaseActivity {
 
-    private RestaurantRepository mRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

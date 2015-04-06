@@ -1,8 +1,14 @@
 package cz.janvanura.vegfinder;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,11 +19,50 @@ public class RestaurantMainActivity extends BaseActivity implements RestaurantLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.restaurant_main_activity);
+
+
+        Intent intent = getIntent();
+        if(intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+            RestaurantListViewFragment listViewFragment = (RestaurantListViewFragment) getSupportFragmentManager().findFragmentById(R.id.list_fragment);
+            listViewFragment.doSearch(query);
+        }
+        else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+
+            Uri detailUri = intent.getData();
+            String id = detailUri.getLastPathSegment();
+
+            showDetail(Integer.parseInt(id));
+        }
+
+
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false);
+
+        return true;
     }
 
 
     @Override
     public void itemClick(int rowId) {
+
+        showDetail(rowId);
+    }
+
+
+    private void showDetail(int rowId){
 
         RestaurantDetailFragment detailFragment = (RestaurantDetailFragment) getSupportFragmentManager().findFragmentById(R.id.detail_fragment);
 

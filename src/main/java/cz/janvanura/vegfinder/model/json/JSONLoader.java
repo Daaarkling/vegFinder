@@ -1,5 +1,6 @@
 package cz.janvanura.vegfinder.model.json;
 
+import android.util.AndroidException;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -23,43 +24,33 @@ import java.io.InputStreamReader;
 public class JSONLoader {
 
 
-    public static JSONArray getJSONFromUrl(String url) {
+    public static JSONArray getJSONFromUrl(String url) throws JSONException, IOException {
 
         StringBuilder builder = new StringBuilder();
         HttpClient client = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);
 
-        try {
-            HttpResponse response = client.execute(httpGet);
-            StatusLine statusLine = response.getStatusLine();
+        HttpResponse response = client.execute(httpGet);
+        StatusLine statusLine = response.getStatusLine();
 
-            int statusCode = statusLine.getStatusCode();
+        int statusCode = statusLine.getStatusCode();
 
-            if (statusCode == 200) {
-                HttpEntity entity = response.getEntity();
-                InputStream content = entity.getContent();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-                String line;
+        if (statusCode == 200) {
+            HttpEntity entity = response.getEntity();
+            InputStream content = entity.getContent();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+            String line;
 
-                while ((line = reader.readLine()) != null) {
-                    builder.append(line);
-                }
-
-                JSONArray jArray = new JSONArray( builder.toString());
-                return jArray;
+            while ((line = reader.readLine()) != null) {
+                builder.append(line);
             }
-            else {
-                Log.e("==>", "Failed to download file");
-            }
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        }  catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+            JSONArray jArray = new JSONArray(builder.toString());
+            return jArray;
         }
-
-        return null;
+        else {
+            throw new IOException("Server did NOT response with code 200.");
+        }
     }
 
 }
