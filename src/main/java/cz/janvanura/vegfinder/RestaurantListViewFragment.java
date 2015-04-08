@@ -25,7 +25,6 @@ public class RestaurantListViewFragment extends ListFragment implements LoaderMa
 
     private SimpleCursorAdapter mAdapter;
     private OnItemClick mOnItemClick;
-    private String mSelectionArg;
 
 
     @Override
@@ -82,10 +81,12 @@ public class RestaurantListViewFragment extends ListFragment implements LoaderMa
                     selectionArg = new String[] {query, query};
                 }
 
+                String[] projection = new String[]{RestaurantDbSchema._ID, RestaurantDbSchema.C_NAME, RestaurantDbSchema.C_LOCALITY};
+
                 return new CursorLoader(
                         getActivity(),
                         RestaurantDbSchema.CONTENT_URI,
-                        null,
+                        projection,
                         selection,
                         selectionArg,
                         RestaurantDbSchema.C_NAME

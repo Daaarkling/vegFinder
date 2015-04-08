@@ -1,6 +1,7 @@
 package cz.janvanura.vegfinder;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.ContentProviderOperation;
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +24,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import cz.janvanura.vegfinder.model.db.RestaurantDbSchema;
 import cz.janvanura.vegfinder.model.db.RestaurantProvider;
@@ -102,6 +103,7 @@ public class BaseActivity extends ActionBarActivity {
 
                 // delete old values
                 batchOps.add(ContentProviderOperation.newDelete(RestaurantDbSchema.CONTENT_URI).build());
+                batchOps.add(ContentProviderOperation.newDelete(RestaurantDbSchema.Search.CONTENT_URI).build());
 
                 for(int i = 0; i <= jsonArray.length()-1; i++) {
 
@@ -110,14 +112,22 @@ public class BaseActivity extends ActionBarActivity {
                     values = new ContentValues();
                     values.put(RestaurantDbSchema._ID, jsonObject.getLong(RestaurantDbSchema.J_ID));
                     values.put(RestaurantDbSchema.C_NAME, jsonObject.getString(RestaurantDbSchema.J_NAME));
+                    values.put(RestaurantDbSchema.C_IMAGE, jsonObject.getString(RestaurantDbSchema.J_IMAGE));
                     values.put(RestaurantDbSchema.C_LATITUDE, jsonObject.getDouble(RestaurantDbSchema.J_LAT));
                     values.put(RestaurantDbSchema.C_LONGITUDE, jsonObject.getDouble(RestaurantDbSchema.J_LON));
                     values.put(RestaurantDbSchema.C_LOCALITY, jsonObject.getString(RestaurantDbSchema.J_LOCALITY));
                     values.put(RestaurantDbSchema.C_STREET, jsonObject.getString(RestaurantDbSchema.J_STREET));
+                    values.put(RestaurantDbSchema.C_OPENING, jsonObject.getString(RestaurantDbSchema.J_OPENING));
 
-                    batchOps.add(ContentProviderOperation.newInsert(RestaurantDbSchema.CONTENT_URI)
-                                   .withValues(values).build());
+                    batchOps.add(ContentProviderOperation.newInsert(RestaurantDbSchema.CONTENT_URI).withValues(values).build());
+                    values.clear();
 
+                    values.put(RestaurantDbSchema.Search._ID, jsonObject.getLong(RestaurantDbSchema.J_ID));
+                    values.put(SearchManager.SUGGEST_COLUMN_TEXT_1, jsonObject.getString(RestaurantDbSchema.J_NAME));
+                    values.put(SearchManager.SUGGEST_COLUMN_TEXT_2, jsonObject.getString(RestaurantDbSchema.J_LOCALITY));
+                    values.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, jsonObject.getLong(RestaurantDbSchema.J_ID));
+
+                    batchOps.add(ContentProviderOperation.newInsert(RestaurantDbSchema.Search.CONTENT_URI).withValues(values).build());
                     values.clear();
                 }
 

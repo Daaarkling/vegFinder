@@ -2,7 +2,7 @@
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
             android:label="@string/app_name"
             android:hint="@string/search_hint"
-            android:searchSuggestAuthority="cz.janvanura.vegfinder.model.db.RestaurantSuggestionProvider"
+            android:searchSuggestAuthority="cz.janvanura.vegfinder.contentprovider"
             android:searchSuggestIntentAction="android.intent.action.VIEW"
-            android:searchSuggestSelection="name like ?">
+            android:searchSuggestIntentData="content://cz.janvanura.vegfinder.contentprovider/restaurants_search">
 </searchable>

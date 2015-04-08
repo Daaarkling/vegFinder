@@ -1,9 +1,9 @@
 package cz.janvanura.vegfinder.model.db;
 
+import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.OperationApplicationException;
@@ -13,7 +13,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,6 +27,9 @@ public class RestaurantProvider extends ContentProvider {
 
     private static final int RESTAURANTS = 1;
     private static final int RESTAURANT_ITEM = 2;
+    private static final int RESTAURANT_SUGGESTION = 3;
+    private static final int RESTAURANT_SUGGESTION_NO_PARAM = 4;
+    private static final int RESTAURANT_ITEM_SEARCH = 5;
 
     public static final String AUTHORITY = "cz.janvanura.vegfinder.contentprovider";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
@@ -37,6 +39,9 @@ public class RestaurantProvider extends ContentProvider {
     static {
         sURIMatcher.addURI(AUTHORITY, "restaurants", RESTAURANTS);
         sURIMatcher.addURI(AUTHORITY, "restaurants/#", RESTAURANT_ITEM);
+        sURIMatcher.addURI(AUTHORITY, "search_suggest_query/*", RESTAURANT_SUGGESTION);
+        sURIMatcher.addURI(AUTHORITY, "search_suggest_query", RESTAURANT_SUGGESTION_NO_PARAM);
+        sURIMatcher.addURI(AUTHORITY, "restaurants_search/#", RESTAURANT_ITEM_SEARCH);
     }
 
 
@@ -58,10 +63,22 @@ public class RestaurantProvider extends ContentProvider {
             case RESTAURANTS:
                 queryBuilder.setTables(RestaurantDbSchema.TABLE_NAME);
                 break;
+
+            case RESTAURANT_ITEM_SEARCH:
             case RESTAURANT_ITEM:
+
                 queryBuilder.setTables(RestaurantDbSchema.TABLE_NAME);
                 queryBuilder.appendWhere(RestaurantDbSchema._ID + " = " + uri.getLastPathSegment());
                 break;
+
+            case RESTAURANT_SUGGESTION:
+                queryBuilder.setTables(RestaurantDbSchema.Search.TABLE_NAME);
+                queryBuilder.appendWhere(
+                        SearchManager.SUGGEST_COLUMN_TEXT_1 + " MATCH '*" + uri.getLastPathSegment() + "*'");
+                break;
+
+            case RESTAURANT_SUGGESTION_NO_PARAM:
+                return null;
             default:
                 throw new IllegalArgumentException("Unknown URI:" + uri);
         }
@@ -70,7 +87,7 @@ public class RestaurantProvider extends ContentProvider {
             sortOrder = RestaurantDbSchema._ID;
         }
 
-        SQLiteDatabase database = mRestaurantDbHelper.getWritableDatabase();
+        SQLiteDatabase database = mRestaurantDbHelper.getReadableDatabase();
         Cursor cursor = queryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
 
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -82,8 +99,10 @@ public class RestaurantProvider extends ContentProvider {
     public String getType(Uri uri) {
 
         switch (sURIMatcher.match(uri)){
+            case RESTAURANT_SUGGESTION:
             case RESTAURANTS:
                 return RestaurantDbSchema.CONTENT_TYPE;
+            case RESTAURANT_ITEM_SEARCH:
             case RESTAURANT_ITEM:
                 return RestaurantDbSchema.CONTENT_ITEM_TYPE;
             default:
@@ -95,28 +114,35 @@ public class RestaurantProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
 
         SQLiteDatabase database = mRestaurantDbHelper.getWritableDatabase();
+        long id = -1;
 
         switch (sURIMatcher.match(uri)) {
             case RESTAURANTS:
-                long id = database.insert(RestaurantDbSchema.TABLE_NAME, null, values);
-
-                if (id > 0) {
-                    Uri itemUri = ContentUris.withAppendedId(uri, id);
-                    if (!isInBatchMode()) {
-                        getContext().getContentResolver().notifyChange(itemUri, null);
-                    }
-                    return itemUri;
-                }
-
-                // s.th. went wrong:
-                try {
-                    throw new SQLException("Problem while inserting into uri: " + uri);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                id = database.insert(RestaurantDbSchema.TABLE_NAME, null, values);
+                break;
+            case RESTAURANT_SUGGESTION_NO_PARAM:
+                id = database.insert(RestaurantDbSchema.Search.TABLE_NAME, null, values);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI:" + uri);
 
+        }
+
+        if (id > 0) {
+            Uri itemUri = ContentUris.withAppendedId(uri, id);
+            if (!isInBatchMode()) {
+                getContext().getContentResolver().notifyChange(itemUri, null);
+            }
+            return itemUri;
+        }
+
+        // s.th. went wrong:
+        try {
+            throw new SQLException("Problem while inserting into uri: " + uri);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            return null;
         }
     }
 
