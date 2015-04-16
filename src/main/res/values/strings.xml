@@ -10,7 +10,11 @@
     <string name="search_hint">Search restaurant</string>
     <string name="populate_error">Updating restaurants failed!</string>
     <string name="populate_success">Updating restaurants success!</string>
-    <string name="populate_progress">Updating restaurants in progress...</string>
+    <string name="populate_progress">Updating restaurants...</string>
     <string name="populate_progress_title">Updating</string>
+    <string name="populate_start">Updating restaurants</string>
+    <string name="closest">Closest</string>
+    <string name="title_activity_restaurants_map">Map</string>
+
 
 </resources>

@@ -27,9 +27,9 @@ public class RestaurantProvider extends ContentProvider {
 
     private static final int RESTAURANTS = 1;
     private static final int RESTAURANT_ITEM = 2;
-    private static final int RESTAURANT_SUGGESTION = 3;
-    private static final int RESTAURANT_SUGGESTION_NO_PARAM = 4;
-    private static final int RESTAURANT_ITEM_SEARCH = 5;
+    private static final int RESTAURANT_SEARCH = 3;
+    private static final int RESTAURANT_SEARCH_NO_PARAM = 4;
+    private static final int RESTAURANT_SEARCH_ITEM = 5;
 
     public static final String AUTHORITY = "cz.janvanura.vegfinder.contentprovider";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
@@ -39,9 +39,9 @@ public class RestaurantProvider extends ContentProvider {
     static {
         sURIMatcher.addURI(AUTHORITY, "restaurants", RESTAURANTS);
         sURIMatcher.addURI(AUTHORITY, "restaurants/#", RESTAURANT_ITEM);
-        sURIMatcher.addURI(AUTHORITY, "search_suggest_query/*", RESTAURANT_SUGGESTION);
-        sURIMatcher.addURI(AUTHORITY, "search_suggest_query", RESTAURANT_SUGGESTION_NO_PARAM);
-        sURIMatcher.addURI(AUTHORITY, "restaurants_search/#", RESTAURANT_ITEM_SEARCH);
+        sURIMatcher.addURI(AUTHORITY, "search_suggest_query/*", RESTAURANT_SEARCH);
+        sURIMatcher.addURI(AUTHORITY, "search_suggest_query", RESTAURANT_SEARCH_NO_PARAM);
+        sURIMatcher.addURI(AUTHORITY, "restaurants_search/#", RESTAURANT_SEARCH_ITEM);
     }
 
 
@@ -64,20 +64,21 @@ public class RestaurantProvider extends ContentProvider {
                 queryBuilder.setTables(RestaurantDbSchema.TABLE_NAME);
                 break;
 
-            case RESTAURANT_ITEM_SEARCH:
+            case RESTAURANT_SEARCH_ITEM:
             case RESTAURANT_ITEM:
 
                 queryBuilder.setTables(RestaurantDbSchema.TABLE_NAME);
                 queryBuilder.appendWhere(RestaurantDbSchema._ID + " = " + uri.getLastPathSegment());
                 break;
 
-            case RESTAURANT_SUGGESTION:
+            case RESTAURANT_SEARCH:
+
                 queryBuilder.setTables(RestaurantDbSchema.Search.TABLE_NAME);
                 queryBuilder.appendWhere(
                         SearchManager.SUGGEST_COLUMN_TEXT_1 + " MATCH '*" + uri.getLastPathSegment() + "*'");
                 break;
 
-            case RESTAURANT_SUGGESTION_NO_PARAM:
+            case RESTAURANT_SEARCH_NO_PARAM:
                 return null;
             default:
                 throw new IllegalArgumentException("Unknown URI:" + uri);
@@ -99,10 +100,10 @@ public class RestaurantProvider extends ContentProvider {
     public String getType(Uri uri) {
 
         switch (sURIMatcher.match(uri)){
-            case RESTAURANT_SUGGESTION:
+            case RESTAURANT_SEARCH:
             case RESTAURANTS:
                 return RestaurantDbSchema.CONTENT_TYPE;
-            case RESTAURANT_ITEM_SEARCH:
+            case RESTAURANT_SEARCH_ITEM:
             case RESTAURANT_ITEM:
                 return RestaurantDbSchema.CONTENT_ITEM_TYPE;
             default:
@@ -120,7 +121,7 @@ public class RestaurantProvider extends ContentProvider {
             case RESTAURANTS:
                 id = database.insert(RestaurantDbSchema.TABLE_NAME, null, values);
                 break;
-            case RESTAURANT_SUGGESTION_NO_PARAM:
+            case RESTAURANT_SEARCH_NO_PARAM:
                 id = database.insert(RestaurantDbSchema.Search.TABLE_NAME, null, values);
                 break;
             default:
@@ -158,6 +159,9 @@ public class RestaurantProvider extends ContentProvider {
         int delCount = 0;
 
         switch (sURIMatcher.match(uri)) {
+            case RESTAURANT_SEARCH_NO_PARAM:
+                delCount = database.delete(RestaurantDbSchema.Search.TABLE_NAME, selection, selectionArgs);
+                break;
             case RESTAURANTS:
                 delCount = database.delete(RestaurantDbSchema.TABLE_NAME, selection, selectionArgs);
                 break;

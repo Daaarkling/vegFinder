@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,45 +55,11 @@ public class RestaurantDetailFragment extends Fragment {
         name.setText(cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_NAME)));
         address.setText(cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_STREET)) + ", " + cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_LOCALITY)));
         opening.setText(cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_OPENING)));
-        (new LoadImageTask(imageView)).execute(cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_IMAGE)));
+
+        byte[] bytes = Base64.decode(cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_IMAGE)), Base64.DEFAULT);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        imageView.setImageBitmap(bitmap);
     }
 
-
-    private class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
-
-        private ImageView mImageView;
-
-        public LoadImageTask(ImageView imageView) {
-            mImageView = imageView;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-
-            InputStream inputStream = null;
-            Bitmap bitmap = null;
-            try {
-                inputStream = new URL(params[0]).openStream();
-                bitmap = BitmapFactory.decodeStream(new URL(params[0]).openStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return bitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-
-            mImageView.setImageBitmap(bitmap);
-            Toast.makeText(getActivity(), "ahoj", Toast.LENGTH_SHORT);
-        }
-    }
 
 }

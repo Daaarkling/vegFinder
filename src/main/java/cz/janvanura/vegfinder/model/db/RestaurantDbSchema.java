@@ -23,6 +23,12 @@ public abstract class RestaurantDbSchema implements BaseColumns {
     public static final String C_LOCALITY = "locality";
     public static final String C_IMAGE = "image";
     public static final String C_OPENING = "opening";
+    public static final String C_EMAIL = "email";
+    public static final String C_WEB = "web";
+    public static final String C_TELEPHONE = "telephone";
+    public static final String C_MENU = "menu";
+    public static final String C_DESCRIPTION = "description";
+
 
     public static final String J_ID = "id";
     public static final String J_NAME = "name";
