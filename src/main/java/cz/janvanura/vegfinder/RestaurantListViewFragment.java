@@ -36,7 +36,7 @@ public class RestaurantListViewFragment extends ListFragment implements LoaderMa
     private static final String SEARCH_KEY = "search";
 
     private ResourceCursorAdapter mAdapterAll;
-    private SimpleCursorAdapter mAdapterSearch;
+    private ResourceCursorAdapter mAdapterSearch;
     private OnItemClick mOnItemClick;
 
 
@@ -58,13 +58,9 @@ public class RestaurantListViewFragment extends ListFragment implements LoaderMa
 
         getLoaderManager().initLoader(LOADER_ALL, null, this);
 
-
-
-
         mAdapterAll = new ResourceCursorAdapter(getActivity(), R.layout.restaurant_list_item, null, 0) {
             @Override
             public void bindView(View view, Context context, Cursor cursor) {
-
                 if(cursor != null) {
                     TextView name = (TextView) view.findViewById(R.id.list_item_name);
                     TextView address = (TextView) view.findViewById(R.id.list_item_address);
@@ -86,14 +82,18 @@ public class RestaurantListViewFragment extends ListFragment implements LoaderMa
 
     public void doSearch(String s) {
 
-        mAdapterSearch = new SimpleCursorAdapter(
-                getActivity(),
-                R.layout.restaurant_list_item,
-                null,
-                new String[]{SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2},
-                new int[]{R.id.list_item_name, R.id.list_item_address},
-                0
-        );
+        mAdapterSearch = new ResourceCursorAdapter(getActivity(), R.layout.restaurant_list_item, null, 0) {
+            @Override
+            public void bindView(View view, Context context, Cursor cursor) {
+                if(cursor != null) {
+                    TextView name = (TextView) view.findViewById(R.id.list_item_name);
+                    TextView address = (TextView) view.findViewById(R.id.list_item_address);
+
+                    name.setText(cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1)));
+                    address.setText(cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_2)));
+                }
+            }
+        };
 
         setListAdapter(mAdapterSearch);
 
@@ -103,6 +103,7 @@ public class RestaurantListViewFragment extends ListFragment implements LoaderMa
         getLoaderManager().destroyLoader(LOADER_ALL);
         getLoaderManager().initLoader(LOADER_SEARCH, bundle, this);
     }
+
 
 
     @Override

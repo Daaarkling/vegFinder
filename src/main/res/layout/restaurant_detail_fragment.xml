@@ -1,33 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
 
-    <ImageView
+<LinearLayout
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="32sp"
+        android:id="@+id/detail_name"
+        android:text="Bemba"
+        android:layout_gravity="center_horizontal"/>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/detail_image"/>
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/detail_name"
-        android:textSize="30sp"
-        android:text="Restaurace Zdravá výživa"
-        android:paddingBottom="10dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/detail_address"
-        android:textSize="30sp"
-        android:text="Koucourkov 12, Kdovíkde"/>
+        <ImageView
+            android:id="@+id/detail_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/vegfinder"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pozývame vás do prvej reštaurácie so živou stravou na Slovensku. Príďte sa presvedčiť, že nevariť je nielen zdravé, ale aj chutné. Schudnite a prinavráťte si zdravie s prirodzenou rastlinnou stravou. Chudnutie je pri konzumácii rastlinnej stravy prirodzené.  Zastavte sa u nás a presvedčíte sa, že obezita nie je choroba a dá sa ľahko odstrániť."
+            android:textSize="16sp"
+            android:id="@+id/detail_desc"/>
+
+    </LinearLayout>
+
+
+
+    <GridLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:columnCount="2"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:useDefaultMargins="true"
+        android:rowOrderPreserved="false">
+
+
+        <TextView
+            android:text="@string/web"
+            android:textStyle="bold"
+            android:layout_gravity="right"
+            android:layout_column="0"
+            android:layout_row="0"
+            />
+
+        <TextView
+            android:text="http://soucitne.cz/restaurace/bemba"
+            android:layout_column="1"
+            android:layout_row="0"
+            android:id="@+id/detail_web"/>
+
+        <TextView
+            android:text="E-mail"
+            android:textStyle="bold"
+            android:layout_column="0"
+            android:layout_gravity="right"
+            android:layout_row="1"/>
+
+        <TextView
+            android:text="restauraciabemba@gmail.com"
+            android:autoLink="email"
+            android:layout_column="1"
+            android:layout_row="1"
+            android:id="@+id/detail_email"/>
+
+        <TextView
+            android:text="@string/menu"
+            android:textStyle="bold"
+            android:layout_column="0"
+            android:layout_gravity="right"
+            android:layout_row="2"/>
+
+        <TextView
+            android:text="http://www.restauraciabemba.sk/restauracia/jedalny-listok/"
+            android:layout_column="1"
+            android:layout_row="2"
+            android:id="@+id/detail_menu"/>
+
+        <TextView
+            android:text="@string/opening_time"
+            android:textStyle="bold"
+            android:layout_column="0"
+            android:layout_gravity="right"
+            android:layout_row="3"/>
+
+        <TextView
+            android:text="Pondělí - Sobota: 10:00 - 21:00"
+            android:layout_column="1"
+            android:layout_row="3"
+            android:id="@+id/detail_opening"/>
+
+        <TextView
+            android:text="@string/address"
+            android:textStyle="bold"
+            android:layout_column="0"
+            android:layout_gravity="right"
+            android:layout_row="4"/>
+
+        <TextView
+            android:text="Hálková 1, 831 03 Bratislava - Nové mesto, Slovensko"
+            android:layout_column="1"
+            android:layout_row="4"
+            android:id="@+id/detail_address"/>
+
+
+
+    </GridLayout>
+
+    <fragment
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/map"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/detail_opening"
-        android:text="Pondělí - Neděle : 11:00 - 00:00'"/>
+        android:name="com.google.android.gms.maps.MapFragment"
+        />
 
 </LinearLayout>

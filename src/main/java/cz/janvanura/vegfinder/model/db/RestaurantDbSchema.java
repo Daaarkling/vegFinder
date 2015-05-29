@@ -22,22 +22,16 @@ public abstract class RestaurantDbSchema implements BaseColumns {
     public static final String C_STREET = "street";
     public static final String C_LOCALITY = "locality";
     public static final String C_IMAGE = "image";
-    public static final String C_OPENING = "opening";
+    public static final String C_OPENING = "openingTime";
     public static final String C_EMAIL = "email";
     public static final String C_WEB = "web";
     public static final String C_TELEPHONE = "telephone";
     public static final String C_MENU = "menu";
     public static final String C_DESCRIPTION = "description";
+    public static final String C_FACEBOOK = "facebook";
+    public static final String C_POSTAL_CODE = "postalCode";
+    public static final String C_COUNTRY = "country";
 
-
-    public static final String J_ID = "id";
-    public static final String J_NAME = "name";
-    public static final String J_LAT = "latitude";
-    public static final String J_LON = "longitude";
-    public static final String J_STREET = "street";
-    public static final String J_LOCALITY = "locality";
-    public static final String J_IMAGE = "image";
-    public static final String J_OPENING = "openingTime";
 
     public static final String DATA_URL = "http://www.veganstvi.net/vegfinder";
 

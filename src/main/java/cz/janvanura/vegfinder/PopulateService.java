@@ -76,7 +76,6 @@ public class PopulateService extends IntentService {
     private Boolean populate() {
 
         try {
-
             ArrayList<ContentProviderOperation> batchOps = new ArrayList<>();
             ContentValues values;
             JSONArray jsonArray = JSONLoader.getJSONFromUrl(RestaurantDbSchema.DATA_URL);
@@ -91,22 +90,30 @@ public class PopulateService extends IntentService {
                 jsonObject = jsonArray.getJSONObject(i);
 
                 values = new ContentValues();
-                values.put(RestaurantDbSchema._ID, jsonObject.getLong(RestaurantDbSchema.J_ID));
-                values.put(RestaurantDbSchema.C_NAME, jsonObject.getString(RestaurantDbSchema.J_NAME));
-                values.put(RestaurantDbSchema.C_IMAGE, jsonObject.getString(RestaurantDbSchema.J_IMAGE));
-                values.put(RestaurantDbSchema.C_LATITUDE, jsonObject.getDouble(RestaurantDbSchema.J_LAT));
-                values.put(RestaurantDbSchema.C_LONGITUDE, jsonObject.getDouble(RestaurantDbSchema.J_LON));
-                values.put(RestaurantDbSchema.C_LOCALITY, jsonObject.getString(RestaurantDbSchema.J_LOCALITY));
-                values.put(RestaurantDbSchema.C_STREET, jsonObject.getString(RestaurantDbSchema.J_STREET));
-                values.put(RestaurantDbSchema.C_OPENING, jsonObject.getString(RestaurantDbSchema.J_OPENING));
+                values.put(RestaurantDbSchema._ID, jsonObject.getLong("id"));
+                values.put(RestaurantDbSchema.C_NAME, jsonObject.getString(RestaurantDbSchema.C_NAME));
+                values.put(RestaurantDbSchema.C_IMAGE, jsonObject.getString(RestaurantDbSchema.C_IMAGE));
+                values.put(RestaurantDbSchema.C_LATITUDE, jsonObject.getDouble(RestaurantDbSchema.C_LATITUDE));
+                values.put(RestaurantDbSchema.C_LONGITUDE, jsonObject.getDouble(RestaurantDbSchema.C_LONGITUDE));
+                values.put(RestaurantDbSchema.C_LOCALITY, jsonObject.getString(RestaurantDbSchema.C_LOCALITY));
+                values.put(RestaurantDbSchema.C_STREET, jsonObject.getString(RestaurantDbSchema.C_STREET));
+                values.put(RestaurantDbSchema.C_OPENING, jsonObject.getString(RestaurantDbSchema.C_OPENING));
+                values.put(RestaurantDbSchema.C_MENU, jsonObject.getString(RestaurantDbSchema.C_MENU));
+                values.put(RestaurantDbSchema.C_COUNTRY, jsonObject.getString(RestaurantDbSchema.C_COUNTRY));
+                values.put(RestaurantDbSchema.C_EMAIL, jsonObject.getString(RestaurantDbSchema.C_EMAIL));
+                values.put(RestaurantDbSchema.C_FACEBOOK, jsonObject.getString(RestaurantDbSchema.C_FACEBOOK));
+                values.put(RestaurantDbSchema.C_WEB, jsonObject.getString(RestaurantDbSchema.C_WEB));
+                values.put(RestaurantDbSchema.C_POSTAL_CODE, jsonObject.getString(RestaurantDbSchema.C_POSTAL_CODE));
+                values.put(RestaurantDbSchema.C_TELEPHONE, jsonObject.getString(RestaurantDbSchema.C_TELEPHONE));
+                values.put(RestaurantDbSchema.C_DESCRIPTION, jsonObject.getString(RestaurantDbSchema.C_DESCRIPTION));
 
                 batchOps.add(ContentProviderOperation.newInsert(RestaurantDbSchema.CONTENT_URI).withValues(values).build());
                 values.clear();
 
-                values.put(RestaurantDbSchema.Search._ID, jsonObject.getLong(RestaurantDbSchema.J_ID));
-                values.put(SearchManager.SUGGEST_COLUMN_TEXT_1, jsonObject.getString(RestaurantDbSchema.J_NAME));
-                values.put(SearchManager.SUGGEST_COLUMN_TEXT_2, jsonObject.getString(RestaurantDbSchema.J_LOCALITY));
-                values.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, jsonObject.getLong(RestaurantDbSchema.J_ID));
+                values.put(RestaurantDbSchema.Search._ID, jsonObject.getLong("id"));
+                values.put(SearchManager.SUGGEST_COLUMN_TEXT_1, jsonObject.getString(RestaurantDbSchema.C_NAME));
+                values.put(SearchManager.SUGGEST_COLUMN_TEXT_2, jsonObject.getString(RestaurantDbSchema.C_LOCALITY));
+                values.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, jsonObject.getLong("id"));
 
                 batchOps.add(ContentProviderOperation.newInsert(RestaurantDbSchema.Search.CONTENT_URI).withValues(values).build());
                 values.clear();

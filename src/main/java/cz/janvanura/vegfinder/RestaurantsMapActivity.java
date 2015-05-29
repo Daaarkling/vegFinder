@@ -1,14 +1,23 @@
 package cz.janvanura.vegfinder;
 
+import android.content.ContentUris;
+import android.database.Cursor;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class RestaurantsMapActivity extends BaseActivity {
+import cz.janvanura.vegfinder.model.db.RestaurantDbSchema;
+
+public class RestaurantsMapActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    public static final int LOADER_MAP = 1;
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
@@ -17,12 +26,45 @@ public class RestaurantsMapActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurants_map);
         setUpMapIfNeeded();
+        getSupportLoaderManager().initLoader(LOADER_MAP, null, this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();
+    }
+
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        switch (id) {
+            case LOADER_MAP:
+                return new CursorLoader(
+                        this,
+                        RestaurantDbSchema.CONTENT_URI,
+                        new String[]{RestaurantDbSchema.C_LATITUDE, RestaurantDbSchema.C_LONGITUDE, RestaurantDbSchema._ID, RestaurantDbSchema.C_NAME},
+                        null,
+                        null,
+                        null
+                );
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        if (mMap != null) {
+            setUpMap(data);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 
     /**
@@ -44,12 +86,9 @@ public class RestaurantsMapActivity extends BaseActivity {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
-            // Check if we were successful in obtaining the map.
-            if (mMap != null) {
-                setUpMap();
-            }
+            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+        }
+        if (mMap != null) {
         }
     }
 
@@ -59,7 +98,18 @@ public class RestaurantsMapActivity extends BaseActivity {
      * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
-    private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+    private void setUpMap(Cursor cursor) {
+
+        float lat;
+        float lon;
+        String name;
+        while (cursor.moveToNext()) {
+
+            lat = cursor.getFloat(cursor.getColumnIndex(RestaurantDbSchema.C_LATITUDE));
+            lon = cursor.getFloat(cursor.getColumnIndex(RestaurantDbSchema.C_LONGITUDE));
+            name = cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_NAME));
+
+            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title(name));
+        }
     }
 }

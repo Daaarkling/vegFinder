@@ -53,6 +53,8 @@ public class BaseActivity extends ActionBarActivity {
         }
         else if(id == R.id.closest_restaurants) {
 
+            Intent intent = new Intent(this, RestaurantsMapActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

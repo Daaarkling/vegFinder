@@ -2,19 +2,25 @@
 <resources>
 
     <string name="app_name">VegFinder</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="hello_world">Ahoj světe!</string>
+    <string name="action_settings">Nastavení</string>
     <string name="detail">Detail</string>
-    <string name="update">Update</string>
-    <string name="action_search">Search...</string>
-    <string name="search_hint">Search restaurant</string>
-    <string name="populate_error">Updating restaurants failed!</string>
-    <string name="populate_success">Updating restaurants success!</string>
-    <string name="populate_progress">Updating restaurants...</string>
-    <string name="populate_progress_title">Updating</string>
-    <string name="populate_start">Updating restaurants</string>
-    <string name="closest">Closest</string>
+    <string name="update">Aktualizovat</string>
+    <string name="action_search">Hledat...</string>
+    <string name="search_hint">Hledat restauraci</string>
+    <string name="populate_error">Aktualizace restaurací se nezdařila!</string>
+    <string name="populate_success">Aktualizace restaurací proběhla úspěšně!</string>
+    <string name="populate_progress">Aktualizování restaurací...</string>
+    <string name="populate_progress_title">Aktualizace</string>
+    <string name="populate_start">Aktualizace restaurací</string>
+    <string name="closest">Nejbližší</string>
     <string name="title_activity_restaurants_map">Map</string>
+    <string name="opening_time">Otevírací čas:</string>
+    <string name="address">Adresa:</string>
+    <string name="telephone">Telefon:</string>
+    <string name="web">Web:</string>
+    <string name="menu">Jídelní lístek:</string>
+    <string name="link">odkaz</string>
 
 
 </resources>
