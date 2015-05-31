@@ -1,4 +1,4 @@
-package cz.janvanura.vegfinder;
+package cz.janvanura.vegfinder.service;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import cz.janvanura.vegfinder.R;
 import cz.janvanura.vegfinder.model.db.RestaurantDbSchema;
 import cz.janvanura.vegfinder.model.db.RestaurantProvider;
 import cz.janvanura.vegfinder.model.json.JSONLoader;
@@ -113,6 +114,7 @@ public class PopulateService extends IntentService {
                 values.put(RestaurantDbSchema.Search._ID, jsonObject.getLong("id"));
                 values.put(SearchManager.SUGGEST_COLUMN_TEXT_1, jsonObject.getString(RestaurantDbSchema.C_NAME));
                 values.put(SearchManager.SUGGEST_COLUMN_TEXT_2, jsonObject.getString(RestaurantDbSchema.C_LOCALITY));
+                values.put(RestaurantDbSchema.C_IMAGE, jsonObject.getString(RestaurantDbSchema.C_IMAGE));
                 values.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, jsonObject.getLong("id"));
 
                 batchOps.add(ContentProviderOperation.newInsert(RestaurantDbSchema.Search.CONTENT_URI).withValues(values).build());

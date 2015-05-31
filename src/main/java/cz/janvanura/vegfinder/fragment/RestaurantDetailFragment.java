@@ -1,14 +1,13 @@
-package cz.janvanura.vegfinder;
+package cz.janvanura.vegfinder.fragment;
 
 
-import android.app.SearchManager;
 import android.content.ContentUris;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -16,13 +15,15 @@ import android.support.v4.content.Loader;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import cz.janvanura.vegfinder.R;
+import cz.janvanura.vegfinder.activity.RestaurantsMapActivity;
 import cz.janvanura.vegfinder.model.db.RestaurantDbSchema;
 
 /**
@@ -31,13 +32,23 @@ import cz.janvanura.vegfinder.model.db.RestaurantDbSchema;
 public class RestaurantDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String ROW_ID = "rowId";
+    public static final String MAP_POS_LAT = "lat";
+    public static final String MAP_POS_LON = "lon";
     public static final int LOADER_DETAIL = 1;
+
+    private Button mBtnNav;
+    private Button mBtnMap;
+
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.restaurant_detail_fragment, container, false);
+
+        mBtnNav = (Button) v.findViewById(R.id.detail_btn_nav);
+        mBtnMap = (Button) v.findViewById(R.id.detail_btn_map);
+
         return v;
     }
 
@@ -46,7 +57,7 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
 
         Bundle bundle = new Bundle();
         bundle.putInt(ROW_ID, rowId);
-        getLoaderManager().initLoader(LOADER_DETAIL, bundle, this);
+        getLoaderManager().restartLoader(LOADER_DETAIL, bundle, this);
     }
 
 
@@ -98,7 +109,8 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
         TextView opening = (TextView) getView().findViewById(R.id.detail_opening);
         ImageView imageView = (ImageView) getView().findViewById(R.id.detail_image);
 
-        name.setText(cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_NAME)));
+        String nameString = cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_NAME));
+        name.setText(nameString);
         desc.setText(cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_DESCRIPTION)));
 
 
@@ -126,7 +138,8 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
         menu.setText(Html.fromHtml(menuFinal));
 
 
-        address.setText(cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_STREET)) + " " + cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_POSTAL_CODE)) + ", " + cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_LOCALITY)));
+        String addressString = cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_STREET)) + ", " + cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_POSTAL_CODE)) + ", " + cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_LOCALITY));
+        address.setText(addressString);
 
         String openingString = cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_OPENING));
         openingString = openingString.replace(" || ", "<br>");
@@ -136,6 +149,35 @@ public class RestaurantDetailFragment extends Fragment implements LoaderManager.
         byte[] bytes = Base64.decode(cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_IMAGE)), Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         imageView.setImageBitmap(bitmap);
+
+
+        float lat = cursor.getFloat(cursor.getColumnIndex(RestaurantDbSchema.C_LATITUDE));
+        float lon = cursor.getFloat(cursor.getColumnIndex(RestaurantDbSchema.C_LONGITUDE));
+
+        setUpBtn(lat, lon);
     }
 
+
+    private void setUpBtn(final float lat, final float lon){
+
+        mBtnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RestaurantsMapActivity.class);
+                intent.putExtra(MAP_POS_LAT, lat);
+                intent.putExtra(MAP_POS_LON, lon);
+                startActivity(intent);
+            }
+        });
+
+
+        mBtnNav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + lat + "," + lon));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+    }
 }

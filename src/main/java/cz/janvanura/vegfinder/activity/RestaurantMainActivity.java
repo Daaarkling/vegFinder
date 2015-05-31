@@ -1,16 +1,13 @@
-package cz.janvanura.vegfinder;
+package cz.janvanura.vegfinder.activity;
 
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+
+import cz.janvanura.vegfinder.R;
+import cz.janvanura.vegfinder.fragment.RestaurantDetailFragment;
+import cz.janvanura.vegfinder.fragment.RestaurantListViewFragment;
 
 
 public class RestaurantMainActivity extends BaseActivity implements RestaurantListViewFragment.OnItemClick {

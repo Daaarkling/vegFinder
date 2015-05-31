@@ -75,7 +75,7 @@ public class RestaurantProvider extends ContentProvider {
 
                 queryBuilder.setTables(RestaurantDbSchema.Search.TABLE_NAME);
                 queryBuilder.appendWhere(
-                        SearchManager.SUGGEST_COLUMN_TEXT_1 + " MATCH '*" + uri.getLastPathSegment() + "*'");
+                        RestaurantDbSchema.Search.TABLE_NAME + " MATCH '*" + uri.getLastPathSegment() + "*'");
                 break;
 
             case RESTAURANT_SEARCH_NO_PARAM:

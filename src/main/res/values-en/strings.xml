@@ -21,6 +21,9 @@
     <string name="web">Web:</string>
     <string name="menu">Menu:</string>
     <string name="link">link</string>
+    <string name="navigate">Navigate</string>
+    <string name="show_on_map">Show on map</string>
+    <string name="map">Map</string>
 
 
 </resources>

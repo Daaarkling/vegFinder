@@ -1,4 +1,4 @@
-package cz.janvanura.vegfinder;
+package cz.janvanura.vegfinder.fragment;
 
 
 import android.app.Activity;
@@ -23,6 +23,7 @@ import android.widget.ResourceCursorAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import cz.janvanura.vegfinder.R;
 import cz.janvanura.vegfinder.model.db.RestaurantDbSchema;
 import cz.janvanura.vegfinder.model.db.RestaurantProvider;
 
@@ -88,6 +89,11 @@ public class RestaurantListViewFragment extends ListFragment implements LoaderMa
                 if(cursor != null) {
                     TextView name = (TextView) view.findViewById(R.id.list_item_name);
                     TextView address = (TextView) view.findViewById(R.id.list_item_address);
+                    ImageView imageView = (ImageView) view.findViewById(R.id.list_item_image);
+
+                    byte[] bytes = Base64.decode(cursor.getString(cursor.getColumnIndex(RestaurantDbSchema.C_IMAGE)), Base64.DEFAULT);
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    imageView.setImageBitmap(bitmap);
 
                     name.setText(cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1)));
                     address.setText(cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_2)));
@@ -137,11 +143,10 @@ public class RestaurantListViewFragment extends ListFragment implements LoaderMa
                 }
 
                 Uri uri = Uri.withAppendedPath(RestaurantDbSchema.Search.CONTENT_URI, query);
-                Log.e("uri1", uri.toString());
                 return new CursorLoader(
                         getActivity(),
                         uri,
-                        new String[]{RestaurantDbSchema.Search._ID, SearchManager.SUGGEST_COLUMN_TEXT_1, SearchManager.SUGGEST_COLUMN_TEXT_2},
+                        null,
                         null,
                         null,
                         null

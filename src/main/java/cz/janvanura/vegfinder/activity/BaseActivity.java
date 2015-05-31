@@ -1,16 +1,18 @@
-package cz.janvanura.vegfinder;
+package cz.janvanura.vegfinder.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import cz.janvanura.vegfinder.service.PopulateService;
+import cz.janvanura.vegfinder.R;
 
 
 /**
@@ -49,7 +51,7 @@ public class BaseActivity extends ActionBarActivity {
             Intent intent = new Intent(this, PopulateService.class);
             startService(intent);
 
-            Toast.makeText(this, R.string.populate_start, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.populate_start, Toast.LENGTH_LONG).show();
         }
         else if(id == R.id.closest_restaurants) {
 

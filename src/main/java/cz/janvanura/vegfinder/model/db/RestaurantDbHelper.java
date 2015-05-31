@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class RestaurantDbHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "restaurantdb.db";
-    public static final int VERSION = 8;
+    public static final int VERSION = 9;
 
     public static final String CREATE_TABLE_RESTAURANT =
             "CREATE TABLE " + RestaurantDbSchema.TABLE_NAME + " (" +
@@ -35,6 +35,7 @@ public class RestaurantDbHelper extends SQLiteOpenHelper {
     public static final String CREATE_TABLE_RESTAURANT_SEARCH =
             "CREATE VIRTUAL TABLE " + RestaurantDbSchema.Search.TABLE_NAME + " USING fts4(" +
             RestaurantDbSchema.Search._ID + ", " +
+            RestaurantDbSchema.C_IMAGE + ", " +
             SearchManager.SUGGEST_COLUMN_TEXT_1 + ", " +
             SearchManager.SUGGEST_COLUMN_TEXT_2 + ", " +
             SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID + ")";

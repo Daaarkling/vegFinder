@@ -14,13 +14,15 @@
     <string name="populate_progress_title">Aktualizace</string>
     <string name="populate_start">Aktualizace restaurací</string>
     <string name="closest">Nejbližší</string>
-    <string name="title_activity_restaurants_map">Map</string>
+    <string name="title_activity_restaurants_map">Mapa</string>
     <string name="opening_time">Otevírací čas:</string>
     <string name="address">Adresa:</string>
     <string name="telephone">Telefon:</string>
     <string name="web">Web:</string>
     <string name="menu">Jídelní lístek:</string>
     <string name="link">odkaz</string>
-
+    <string name="navigate">Navigovat</string>
+    <string name="show_on_map">Zobrazit na mapě</string>
+    <string name="map">Mapa</string>
 
 </resources>
