@@ -53,7 +53,7 @@ public class PopulateService extends IntentService {
         mBuilder = new Notification.Builder(this);
         mBuilder.setContentTitle(getResources().getString(R.string.populate_progress_title))
                 .setContentText(getResources().getString(R.string.populate_progress))
-                .setSmallIcon(R.drawable.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_vegfinder)
                 .setProgress(0, 0, true)
                 .setOngoing(true);
 
@@ -61,7 +61,7 @@ public class PopulateService extends IntentService {
 
         mBuilder = new Notification.Builder(this);
         mBuilder.setContentTitle(getResources().getString(R.string.populate_progress_title))
-                .setSmallIcon(R.drawable.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_vegfinder)
                 .setAutoCancel(true);
 
         if(populate()) {
@@ -78,7 +78,7 @@ public class PopulateService extends IntentService {
 
         try {
             ArrayList<ContentProviderOperation> batchOps = new ArrayList<>();
-            ContentValues values;
+            ContentValues values = new ContentValues();
             JSONArray jsonArray = JSONLoader.getJSONFromUrl(RestaurantDbSchema.DATA_URL);
             JSONObject jsonObject;
 
@@ -90,7 +90,6 @@ public class PopulateService extends IntentService {
 
                 jsonObject = jsonArray.getJSONObject(i);
 
-                values = new ContentValues();
                 values.put(RestaurantDbSchema._ID, jsonObject.getLong("id"));
                 values.put(RestaurantDbSchema.C_NAME, jsonObject.getString(RestaurantDbSchema.C_NAME));
                 values.put(RestaurantDbSchema.C_IMAGE, jsonObject.getString(RestaurantDbSchema.C_IMAGE));

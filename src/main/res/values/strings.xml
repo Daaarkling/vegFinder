@@ -24,5 +24,6 @@
     <string name="navigate">Navigovat</string>
     <string name="show_on_map">Zobrazit na mapě</string>
     <string name="map">Mapa</string>
+    <string name="list">Seznam</string>
 
 </resources>

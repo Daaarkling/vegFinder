@@ -24,6 +24,7 @@
     <string name="navigate">Navigate</string>
     <string name="show_on_map">Show on map</string>
     <string name="map">Map</string>
+    <string name="list">List</string>
 
 
 </resources>

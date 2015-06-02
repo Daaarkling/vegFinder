@@ -21,13 +21,6 @@ import cz.janvanura.vegfinder.R;
 public class BaseActivity extends ActionBarActivity {
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,9 +46,14 @@ public class BaseActivity extends ActionBarActivity {
 
             Toast.makeText(this, R.string.populate_start, Toast.LENGTH_LONG).show();
         }
-        else if(id == R.id.closest_restaurants) {
+        else if(id == R.id.map_restaurants) {
 
             Intent intent = new Intent(this, RestaurantsMapActivity.class);
+            startActivity(intent);
+        }
+        else if(id == R.id.list_restaurants) {
+
+            Intent intent = new Intent(this, RestaurantMainActivity.class);
             startActivity(intent);
         }
 

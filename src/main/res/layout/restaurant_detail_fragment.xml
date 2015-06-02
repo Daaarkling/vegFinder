@@ -17,7 +17,6 @@
             android:layout_height="wrap_content"
             android:textSize="32sp"
             android:id="@+id/detail_name"
-            android:text="Bemba"
             android:layout_gravity="center_horizontal"/>
 
 
@@ -39,7 +38,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pozývame vás do prvej reštaurácie so živou stravou na Slovensku. Príďte sa presvedčiť, že nevariť je nielen zdravé, ale aj chutné. Schudnite a prinavráťte si zdravie s prirodzenou rastlinnou stravou. Chudnutie je pri konzumácii rastlinnej stravy prirodzené.  Zastavte sa u nás a presvedčíte sa, že obezita nie je choroba a dá sa ľahko odstrániť."
                 android:textSize="16sp"
                 android:id="@+id/detail_desc"/>
 
@@ -60,45 +58,44 @@
 
 
             <TextView
-                android:text="http://soucitne.cz"
                 android:layout_column="1"
                 android:layout_row="1"
-                android:id="@+id/detail_web"/>
+                android:id="@+id/detail_web"
+                android:layout_gravity="left"/>
 
             <TextView
                 android:text="E-mail"
                 android:textStyle="bold"
                 android:layout_column="0"
-                android:layout_gravity="right"
-                android:layout_row="2"/>
+                android:layout_row="2"
+                android:layout_gravity="right"/>
 
             <TextView
                 android:text="@string/web"
                 android:textStyle="bold"
-                android:layout_gravity="right"
                 android:layout_column="0"
                 android:layout_row="1"
-                />
+                android:layout_gravity="right"/>
 
             <TextView
-                android:text="restauraciabemba@gmail.com"
                 android:autoLink="email"
                 android:layout_column="1"
                 android:layout_row="2"
-                android:id="@+id/detail_email"/>
+                android:id="@+id/detail_email"
+                android:layout_gravity="left"/>
 
             <TextView
                 android:text="@string/menu"
                 android:textStyle="bold"
                 android:layout_column="0"
-                android:layout_gravity="right"
-                android:layout_row="3"/>
+                android:layout_row="3"
+                android:layout_gravity="right"/>
 
             <TextView
-                android:text="http://www.restauraciabemba.sk/"
                 android:layout_column="1"
                 android:layout_row="3"
-                android:id="@+id/detail_menu"/>
+                android:id="@+id/detail_menu"
+                android:layout_gravity="left"/>
 
             <TextView
                 android:text="@string/opening_time"
@@ -108,23 +105,23 @@
                 android:layout_row="4"/>
 
             <TextView
-                android:text="Pondělí - Sobota: 10:00 - 21:00"
                 android:layout_column="1"
                 android:layout_row="4"
-                android:id="@+id/detail_opening"/>
+                android:id="@+id/detail_opening"
+                android:layout_gravity="left"/>
 
             <TextView
                 android:text="@string/address"
                 android:textStyle="bold"
                 android:layout_column="0"
-                android:layout_gravity="right"
-                android:layout_row="5"/>
+                android:layout_row="5"
+                android:layout_gravity="right"/>
 
             <TextView
-                android:text="Hálková 1, Nové mesto, Slovensko"
-                android:layout_column="1"
-                android:layout_row="5"
-                android:id="@+id/detail_address"/>
+               android:layout_column="1"
+               android:layout_row="5"
+               android:id="@+id/detail_address"
+               android:layout_gravity="left"/>
 
 
         </GridLayout>

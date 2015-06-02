@@ -8,9 +8,15 @@
           app:showAsAction="ifRoom|collapseActionView"
           app:actionViewClass="android.support.v7.widget.SearchView" />
 
-    <item android:id="@+id/closest_restaurants"
+    <item android:id="@+id/map_restaurants"
           android:icon="@android:drawable/ic_dialog_map"
           android:title="@string/map"
+          app:showAsAction="ifRoom|withText"/>
+
+
+    <item android:id="@+id/list_restaurants"
+          android:icon="@android:drawable/ic_input_get"
+          android:title="@string/list"
           app:showAsAction="ifRoom|withText"/>
 
 

@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import cz.janvanura.vegfinder.R;
 import cz.janvanura.vegfinder.fragment.RestaurantDetailFragment;
@@ -20,8 +21,8 @@ public class RestaurantMainActivity extends BaseActivity implements RestaurantLi
 
         Intent intent = getIntent();
         if(intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
 
+            String query = intent.getStringExtra(SearchManager.QUERY);
             RestaurantListViewFragment listViewFragment = (RestaurantListViewFragment) getSupportFragmentManager().findFragmentById(R.id.list_fragment);
             listViewFragment.doSearch(query);
         }
